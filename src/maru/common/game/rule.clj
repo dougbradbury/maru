@@ -9,10 +9,26 @@
   (cond (= cell gray) position
     :else nil)
   )
- (defn find-all-legal [board color]
-  (remove nil? (map index-if-gray (range (count board)) board))
-   )
+(defn find-all-legal [board color]
+  (remove nil? (map-indexed index-if-gray board))
+  )
 
+(defn in-range [size]  (fn[n] (and (>= n 0) (< n (* size size)))))
+
+(defn neighbors [size position]
+  (filter (in-range size) (list
+    (to-pos (to-x position) (dec (to-y position)))
+    (cond (= (to-x position) 0) -1 :else (to-pos (dec (to-x position)) (to-y position)))
+    (cond (= (to-x position) (- size 1)) -1 :else (to-pos (inc (to-x position)) (to-y position)))
+    (to-pos (to-x position) (inc (to-y position)))
+    ))
+
+  )
+
+(defn find-all-dead-space [board]
+  0
+  ;    (map (dead-spot (west) (range (count board)))
+  )
 ; Given current board, color and position of a stone, return a list of stones to be captured/removed from board.
 ; Definition of capture: http://senseis.xmp.net/?Capture
 ; (defn capture-stones [board color position] '())
